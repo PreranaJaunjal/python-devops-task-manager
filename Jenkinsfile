@@ -38,5 +38,29 @@ pipeline {
                 sh 'docker build -t task-manager-api:${BUILD_NUMBER} .'
             }
         }
+        stage('Docker Scout Security Scan') {
+    steps {
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'dockerhub-scout',
+                usernameVariable: 'DOCKERHUB_USER',
+                passwordVariable: 'DOCKERHUB_TOKEN'
+            )
+        ]) {
+            sh '''
+                echo "$DOCKERHUB_TOKEN" | docker login \
+                    --username "$DOCKERHUB_USER" \
+                    --password-stdin
+            '''
+
+            sh """
+                docker-scout cves task-manager-api:${BUILD_NUMBER} \
+                    --only-severity critical,high
+            """
+
+            sh 'docker logout'
+        }
+    }
+}
     }
 }
