@@ -31,22 +31,12 @@ pipeline {
             }
         }
 
-
-stage('Build Docker Image') {
-    steps {
-        echo 'Building Task Manager Docker image...'
-        sh 'docker version'
-        sh 'docker build -t task-manager-api:${BUILD_NUMBER} .'
-    }
-}
-
-stage('Build Docker Image') {
-    steps {
-        echo 'Building Task Manager Docker image...'
-        sh 'docker version'
-        sh 'docker build -t task-manager-api:${BUILD_NUMBER} .'
-    }
-}
-
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Task Manager Docker image...'
+                sh 'docker version'
+                sh 'docker build -t task-manager-api:${BUILD_NUMBER} .'
+            }
+        }
     }
 }
